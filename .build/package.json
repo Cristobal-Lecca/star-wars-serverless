@@ -1,0 +1,21 @@
+{
+  "devDependencies": {
+    "@types/node": "^20.10.4",
+    "serverless": "^3.38.0",
+    "serverless-offline": "^13.3.2",
+    "serverless-plugin-typescript": "^2.1.5",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1520.0",
+    "dynamodb-doc-client-wrapper": "^2.0.1",
+    "mysql": "^2.18.1",
+    "reflect-metadata": "^0.2.1",
+    "serverless-dynamodb-local": "^0.2.35",
+    "typeorm": "^0.3.17"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js"
+  }
+}

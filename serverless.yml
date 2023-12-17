@@ -1,0 +1,42 @@
+service: my-serverless-project
+
+
+frameworkVersion: "3"
+
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  environment:
+    MYSQL_HOST: 'localhost'
+    MYSQL_USER: 'root'
+    MYSQL_PASSWORD: 'root'
+    MYSQL_DATABASE: 'nombre_de_tu_basededatos'
+
+plugins:
+  - serverless-offline
+
+
+functions:
+  getCharacters:
+    handler: handler.getCharacters
+    events:
+      - http:
+          method: GET
+          path: /characters
+      - http:
+          method: GET
+          path: /characters/{id}
+  getCharacters2:
+    handler: handler.getCharacters2
+    events:
+      - http:
+          method: GET
+          path: /characters2
+  insertData:
+    handler: handler.insertData
+    events:
+      - http:
+          method: POST
+          path: /insertar
+
