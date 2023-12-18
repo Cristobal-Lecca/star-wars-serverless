@@ -1,47 +1,32 @@
-'use strict';
-
+const { sequelize, MyModel } = require('./sequelizeConfig');
 const axios = require('axios');
 
+
+const { getCharacterById, getAllCharacters } = require('./src/controllers');
 
 module.exports.getCharacters = async (event) => {
   const id = event.pathParameters ? event.pathParameters.id : null;
 
   try {
-    if (id) {
-      const response = await axios.get(`https://swapi.dev/api/people/${id}/`);
-      const character = {
-        nombre: response.data.name,
-        altura: response.data.height,
-        masa: response.data.mass,
-        color_pelo: response.data.hair_color,
-        color_piel: response.data.skin_color,
-        color_ojos: response.data.eye_color,
-        nacimiento: response.data.birth_year,
-        genero: response.data.gender
-      };
+    let result;
 
-      return {
+    if (id) {
+      const character = await getCharacterById(id);
+
+      result = {
         statusCode: 200,
         body: JSON.stringify(character),
       };
     } else {
-      const response = await axios.get('https://swapi.dev/api/people/');
-      const characters = response.data.results.map((character) => ({
-        nombre: character.name,
-        altura: character.height,
-        masa: character.mass,
-        color_pelo: character.hair_color,
-        color_piel: character.skin_color,
-        color_ojos: character.eye_color,
-        nacimiento: character.birth_year,
-        genero: character.gender
-      }));
+      const characters = await getAllCharacters();
 
-      return {
+      result = {
         statusCode: 200,
         body: JSON.stringify(characters),
       };
     }
+
+    return result;
   } catch (error) {
     return {
       statusCode: 500,
@@ -50,10 +35,52 @@ module.exports.getCharacters = async (event) => {
   }
 };
 
+// module.exports.getCharacters = async (event) => {
+//   const id = event.pathParameters ? event.pathParameters.id : null;
 
+//   try {
+//     if (id) {
+//       const response = await axios.get(`https://swapi.dev/api/people/${id}/`);
+//       const character = {
+//         nombre: response.data.name,
+//         altura: response.data.height,
+//         masa: response.data.mass,
+//         color_pelo: response.data.hair_color,
+//         color_piel: response.data.skin_color,
+//         color_ojos: response.data.eye_color,
+//         nacimiento: response.data.birth_year,
+//         genero: response.data.gender
+//       };
 
+//       return {
+//         statusCode: 200,
+//         body: JSON.stringify(character),
+//       };
+//     } else {
+//       const response = await axios.get('https://swapi.dev/api/people/');
+//       const characters = response.data.results.map((character) => ({
+//         nombre: character.name,
+//         altura: character.height,
+//         masa: character.mass,
+//         color_pelo: character.hair_color,
+//         color_piel: character.skin_color,
+//         color_ojos: character.eye_color,
+//         nacimiento: character.birth_year,
+//         genero: character.gender
+//       }));
 
-const { sequelize, MyModel } = require('./sequelizeConfig');
+//       return {
+//         statusCode: 200,
+//         body: JSON.stringify(characters),
+//       };
+//     }
+//   } catch (error) {
+//     return {
+//       statusCode: 500,
+//       body: JSON.stringify({ message: 'Error al obtener personajes.' }),
+//     };
+//   }
+// };
 
 
 module.exports.insertData = async (event) => {
